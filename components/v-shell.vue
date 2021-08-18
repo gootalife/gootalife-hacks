@@ -2,15 +2,6 @@
   <div @click="$refs.cmd.focus()">
     <div ref="terminal" id="container">
       <div v-if="banner" id="banner">
-        <p>
-          <img
-            v-if="banner.img"
-            :align="banner.img.align ? banner.img.align : 'left'"
-            :src="banner.img.link ? banner.img.link : '@/logo.png'"
-            :width="banner.img.width ? banner.img.width : '100px'"
-            :height="banner.img.height ? banner.img.height : '100px'"
-          />
-        </p>
         <h2 v-if="banner.header" style="letter-spacing: 4px">{{ banner.header }}</h2>
         <p v-if="banner.subHeader">{{ banner.subHeader }}</p>
         <p v-if="banner.helpHeader">{{ banner.helpHeader }}</p>
@@ -32,6 +23,8 @@
           @keydown.down="history_down()"
           @keydown.tab="cmd_tab($event)"
           class="cmdline"
+          maxlength="50"
+          spellcheck="false"
           autofocus
         />
       </div>
@@ -223,13 +216,13 @@ img {
   margin-right: 20px;
 }
 .input-line {
-  display: -webkit-box;
+  display: -webkit-flex;
   -webkit-box-orient: horizontal;
   -webkit-box-align: stretch;
-  display: -moz-box;
+  display: -moz-flex;
   -moz-box-orient: horizontal;
   -moz-box-align: stretch;
-  display: box;
+  display: flex;
   box-orient: horizontal;
   box-align: stretch;
   clear: both;
@@ -254,10 +247,13 @@ img {
   outline: none;
   background-color: transparent;
   margin: 0;
-  width: 100%;
+  flex: 1 1 auto;
   font: inherit;
   border: none;
   color: inherit;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
 }
 .ls-files {
   height: 45px;
