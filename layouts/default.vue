@@ -1,12 +1,9 @@
 <template>
   <v-app dark>
-    <v-app-bar fixed app>
-      <v-toolbar-title v-text="title" />
-    </v-app-bar>
-    <v-main>
-      <v-container>
-        <nuxt />
-      </v-container>
+    <v-main class="bg">
+      <!-- <v-container> -->
+      <nuxt />
+      <!-- </v-container> -->
     </v-main>
   </v-app>
 </template>
@@ -18,3 +15,13 @@ export default class Default extends Vue {
   title = 'gootalife-hacks';
 }
 </script>
+
+<style scoped>
+.v-application {
+  background-color: black !important;
+  background-attachment: fixed !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  height: 100vh;
+}
+</style>

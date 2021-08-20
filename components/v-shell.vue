@@ -2,16 +2,11 @@
   <div @click="$refs.cmd.focus()">
     <div ref="terminal" id="container">
       <div v-if="banner" id="banner">
-        <h2 v-if="banner.header" style="letter-spacing: 4px">{{ banner.header }}</h2>
-        <p v-if="banner.subHeader">{{ banner.subHeader }}</p>
-        <p v-if="banner.helpHeader">{{ banner.helpHeader }}</p>
-        <p></p>
+        <div v-if="banner.header" ref="header"></div>
       </div>
       <output ref="output"></output>
       <div id="input-line" class="input-line">
         <div class="prompt">
-          <div v-if="banner.emoji.first && showemoji">({{ banner.emoji.first }})</div>
-          <div v-if="banner.emoji.second && !showemoji">({{ banner.emoji.second }})</div>
           <div>{{ banner.sign ? banner.sign : '>>' }}</div>
         </div>
 
@@ -44,20 +39,7 @@ export default {
       default: () => {
         return {
           header: 'Vue Shell',
-          subHeader: 'Shell is power just enjoy 🔥',
-          helpHeader: 'Enter "help" for more information.',
-          emoji: {
-            first: '🔅',
-            second: '🔆',
-            time: 750
-          },
-          sign: 'VueShell $',
-          img: {
-            align: 'left',
-            link: `@/logo.png`,
-            width: 100,
-            height: 100
-          }
+          sign: 'VueShell $'
         };
       }
     },
@@ -67,7 +49,6 @@ export default {
   },
   data() {
     return {
-      showemoji: true,
       value: '',
       history_: [],
       histpos_: 0,
@@ -77,8 +58,8 @@ export default {
   computed: {
     allcommands() {
       var tab = [
-        { name: 'help', desc: 'Show all the commands that are available' },
-        { name: 'clear', desc: 'Clear the terminal of all output' }
+        { name: 'help', desc: 'Show all of available commands.' },
+        { name: 'clear', desc: 'Clear histories of this teaminal.' }
       ];
 
       if (this.commands) {
@@ -158,7 +139,8 @@ export default {
       } else if (cmd == 'help') {
         var commandsList = this.allcommands.map(({ name, desc }) => {
           if (desc) {
-            return `${name}: ${desc}`;
+            const pad = '          ';
+            return `${(name + pad).slice(0, pad.length)}: ${desc}`.replaceAll(' ', '&nbsp;');
           }
           return name;
         });
@@ -168,7 +150,7 @@ export default {
         if (this.commands) {
           this.commands.forEach((command) => {
             if (cmd == command.name) {
-              this.output(command.exec(args));
+              this.output(command.exec(args).replaceAll(' ', '&nbsp;'));
               this.value = cmd;
               return;
             }
@@ -182,16 +164,15 @@ export default {
 
       // Clear/setup line for next input.
     },
-    output(html) {
-      this.$refs.output.insertAdjacentHTML('beforeEnd', '<pre>' + html + '</pre>');
+    output(str) {
+      this.$refs.output.insertAdjacentHTML('beforeEnd', str);
       this.value = '';
+      document.getElementById('input-line').scrollIntoView(true);
     }
   },
   mounted() {
-    if (this.banner.emoji.first && this.banner.emoji.second && this.banner.emoji.time) {
-      setInterval(() => {
-        this.showemoji = !this.showemoji;
-      }, this.banner.emoji.time);
+    if (this.banner.header) {
+      this.$refs.header.insertAdjacentHTML('afterbegin', this.banner.header);
     }
   }
 };
@@ -201,8 +182,6 @@ export default {
 #container {
   color: white;
   background-color: black;
-  font-size: 11pt;
-  font-family: Inconsolata, monospace;
   padding: 0.5em 1.5em 1em 1em;
 }
 #container output {
@@ -210,10 +189,7 @@ export default {
   width: 100%;
 }
 #banner {
-  margin-bottom: 3em;
-}
-img {
-  margin-right: 20px;
+  margin-bottom: 15px;
 }
 .input-line {
   display: -webkit-flex;
@@ -234,11 +210,11 @@ img {
 }
 .prompt {
   white-space: nowrap;
-  color: #3a8b17;
+  color: #6fff30;
   margin-right: 7px;
-  display: -webkit-box;
-  display: -moz-box;
-  display: box;
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: flex;
   box-pack: center;
   box-orient: vertical;
   user-select: none;

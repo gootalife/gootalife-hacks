@@ -4,6 +4,7 @@ module.exports = {
   // https://stylelint.io/user-guide/configuration
   rules: {
     'declaration-block-no-duplicate-properties': null,
-    'property-no-unknown': null
+    'property-no-unknown': null,
+    'font-family-no-missing-generic-family-keyword': null
   }
 };
